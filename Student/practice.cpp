@@ -14,93 +14,80 @@ private:
 	string name;
 	int grades[SUBJCNT];
 public:
-	student() {}
-	~student() {}
+	student() {};
+	~student() {};
 
-	void initstudent() 
+	void initstudent()
 	{
 		for (int i = 0; i < SUBJCNT; i++)
 		{
 			grades[i] = rand() % 101;
 		}
 	};
+
 	void setname(string _name) { name = _name; }
 	int getgrade(int i) { return grades[i]; }
-	void show(int idx) 
+	void show(int idx)
 	{
+
 		printf("\t%s %s %d\n", name.c_str(), subjnames[idx].c_str(), grades[idx]);
-	}
+	};
 };
 
-class classes
+class student_s
 {
-	student *s[STUDENTCOUNT];
+	student s[STUDENTCOUNT];
 public:
-	classes() {}
-	~classes()  // new 를 써서 heap에 메모리 할당했으니, 소멸자에서 메모리 삭제해줘야 함.
+	void init_student_s()
 	{
 		for (int i = 0; i < STUDENTCOUNT; i++)
 		{
-			delete s[i];
+			s[i].setname(stunames[i]);
+			s[i].initstudent();
 		}
+	};
+
+	int findMax(int idx)
+	{
+		int ret = 0;
+		for (int i = 1; i < STUDENTCOUNT; i++)
+			if (s[ret].getgrade(idx) < s[i].getgrade(idx))
+				ret = i;
+		return ret;
 	}
 
-	void init(string stunames[],int count) 
-	{
-		for (int i = 0; i < STUDENTCOUNT; i++)
-		{
-			s[i] = new student;
-			s[i]->setname(stunames[i]);
-			s[i]->initstudent();
-		}
-	
-	};
-	int findMax(int idx) 
+	int findMin(int idx)
 	{
 		int ret = 0;
 		for (int i = 1; i < STUDENTCOUNT; i++)
-		{
-			if (s[ret]->getgrade(idx) < s[i]->getgrade(idx))
+			if (s[ret].getgrade(idx) > s[i].getgrade(idx))
 				ret = i;
-		}
 		return ret;
-	};
-	int findMin(int idx) 
+	}
+
+	void show_student_s(int idx, int i)
 	{
-		int ret = 0;
-		for (int i = 1; i < STUDENTCOUNT; i++)
-		{
-			if (s[ret]->getgrade(idx) > s[i]->getgrade(idx))
-				ret = i;
-		}
-		return ret;
-	
-	};
-	void show(int idx, int ti) 
-	{
-		s[idx]->show(ti);
-	};
+		s[idx].show(i);
+	}
 };
 
 int main()
 {
 	srand((unsigned int)time(NULL));
-	classes cls;
-	cls.init(stunames, STUDENTCOUNT);
-
-	// 최고점수 출력
-	// 최저점수 출력
+	student_s s1;
+	s1.init_student_s();
 
 	for (int i = 0; i < SUBJCNT; i++)
 	{
-		int t1 = cls.findMax(i);
-		int t2 = cls.findMin(i);
-
-		printf("===============================================\n");
+	
+		int a1=s1.findMax(i);
+		int a2=s1.findMin(i);
+		printf("====================================\n");
 		printf("%s Max\n", subjnames[i].c_str());
-		cls.show(t1, i);
+		s1.show_student_s(a1, i);
 		printf("%s Min\n", subjnames[i].c_str());
-		cls.show(t2, i);
+		s1.show_student_s(a2, i);
+
 	}
 	
 }

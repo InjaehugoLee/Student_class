@@ -23,8 +23,6 @@ int FindMin(Student* s[3], int n)
 
 int main()
 {
-	
-
 	srand((unsigned int)time(NULL));
 	Student* s[3];
 	s[0]= new Student("이인재");
@@ -37,9 +35,5 @@ int main()
 	printf("국어 최저 득점 학생\n");
 	
 	s[i]->show();
-
-
 	for (auto t : s) delete t;
-	
-
 }
